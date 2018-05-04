@@ -1,5 +1,11 @@
 package com.example.mis.sensor;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,7 +14,7 @@ import com.example.mis.sensor.FFT;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
     //example variables
     private double[] rndAccExamplevalues;
@@ -23,9 +29,15 @@ public class MainActivity extends AppCompatActivity {
         rndAccExamplevalues = new double[64];
         randomFill(rndAccExamplevalues);
         new FFTAsynctask(64).execute(rndAccExamplevalues);
+
+        thisSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometerSensor = thisSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        //implement RenderLines.java to draw lines
+        RenderLines renderAccelerometerLines = new RenderLines(this);
+        //renderAccelerometerLines.setBackgroundColor(Color.WHITE);
+        setContentView(renderAccelerometerLines);
     }
-
-
     /**
      * Implements the fft functionality as an async task
      * FFT(int n): constructor with fft length
@@ -73,10 +85,6 @@ public class MainActivity extends AppCompatActivity {
             freqCounts = values;
         }
     }
-
-
-
-
     /**
      * little helper function to fill example with random double values
      */
@@ -86,6 +94,26 @@ public class MainActivity extends AppCompatActivity {
             array[i] = rand.nextDouble();
         }
     }
+
+    //: https://developer.android.com/guide/topics/sensors/sensors_overview
+    private SensorManager thisSensorManager;
+    private Sensor accelerometerSensor;
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        //sensor return three values
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+// do something here if sensor value changes
+    }
+
+
 
 
 
