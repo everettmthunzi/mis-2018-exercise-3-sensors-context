@@ -41,27 +41,27 @@ public class RenderLines extends View{
     }
 
 
-    float xValue = 0;
-    float yValue = 0;
-    float zValue = 0;
+  private static float xValue;
+  private static  float yValue;
+  private static  float zValue;
     //float magnitudeValue=0;
 
     public void setAccelerometerReadings(float x, float y, float z){
      xValue = x;
      yValue = y;
      zValue = z;
-
-     //validate our values are updating 
-     Log.d(TAG,"" + xValue + "" + yValue + "" + zValue);
-
+     //validate our values are updating
+     //Log.d(TAG,"" + xValue + "" + yValue + "" + zValue);
     }
+
 
     //flag to indicate start of the application
     Boolean isFirstRun = true;
 
     @Override
     public void onDraw(Canvas canvas) {
-
+        //Log.d(TAG, "onDraw: UPDATE!");
+        Log.d(TAG,"" + xValue + "" + yValue + "" + zValue);
         //get the width and height of screen
         int width = getWidth();
         int height = getHeight();
@@ -84,39 +84,33 @@ public class RenderLines extends View{
         paintMag.setStyle(Paint.Style.FILL);
         paintMag.setColor(Color.WHITE);
 
-        if( isFirstRun == true){
-            Log.d(TAG, "FIRST_RUN:  successful first run !");
-            //the y axis
-            canvas.drawLine((width / 2), 0, (width / 2), height, paintY);
+        /*
+         * All accelerometer values multiplied by a constant factor of 50
+         * This allows better visualization of line movement w.r.t.
+         * accelerometer readings
+         */
 
-            //the x axis
-            canvas.drawLine(0, (height / 2), width, (height / 2), paintX);
+        //update x axis
+        Log.d(TAG, "onDraw: x axis updating!");
+        canvas.drawLine((width / 2) + xValue*50, 0, (width / 2) +
+                xValue*50, height, paintX);
 
-            //the z axis
-            canvas.drawLine(0, 0, width, height, paintZ);
+        //the y axis
+        canvas.drawLine(0, (height / 2) + yValue*50, width, (height / 2) +
+                yValue*50, paintY);
 
-            //the magnitude
-            canvas.drawLine(0, 0, width, 0, paintMag);
+        //the z axis (needs revision)
+        canvas.drawLine(0, 0, width + zValue*50, height
+                + zValue*50, paintZ);
 
-            // remember to update properly
-            isFirstRun = false;
-        }
-        else{
+        //the magnitude (not showing the magnitude yet!!!!)
+        canvas.drawLine(0, 0, width, 0, paintMag);
 
-            //the y axis
-            canvas.drawLine((width / 2), 0, (width / 2), height, paintY);
+        //points to note increase thickness of lines
+        // can line movement be smoother? 
 
-            //the x axis
-            canvas.drawLine(0, (height / 2), width, (height / 2), paintX);
-
-            //the z axis
-            canvas.drawLine(0, 0, width, height, paintZ);
-
-            //the magnitude
-            canvas.drawLine(0, 0, width, 0, paintMag);
-
-        }
-
+        //Redraw
+        invalidate();
 
     }
 }

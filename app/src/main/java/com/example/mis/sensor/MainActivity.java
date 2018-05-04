@@ -25,8 +25,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private double[] rndAccExamplevalues;
     private double[] freqCounts;
 
-    //instance of RenderLines
+    //instance variable RenderLines Object
     RenderLines renderInfo;
+    RenderLines renderAccelerometerLines;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         randomFill(rndAccExamplevalues);
         new FFTAsynctask(64).execute(rndAccExamplevalues);
 
-        //instance of RenderLines
+        //new RenderLines Object within the MainActivity Context
          renderInfo = new RenderLines(MainActivity.this);
 
 
@@ -48,9 +49,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         thisSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
 
         //implement RenderLines.java to draw lines
-        RenderLines renderAccelerometerLines = new RenderLines(this);
-        //renderAccelerometerLines.setBackgroundColor(Color.WHITE);
-        setContentView(renderAccelerometerLines);
+        renderAccelerometerLines = new RenderLines(this);
+        //setContentView(renderAccelerometerLines);
     }
     /**
      * Implements the fft functionality as an async task
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
 
+        //update for every new sensor value
         if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
             return;
 
@@ -126,15 +127,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             renderInfo.setAccelerometerReadings(x,y,z);
             //Log.d(TAG, "TYPE_ACCELEROMETER: reading accelerometer values");
             //Toast.makeText(MainActivity.this,"accelerometer values",Toast.LENGTH_SHORT).show();
-
-        //sensor return three values
-
-
+        setContentView(renderAccelerometerLines);
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-// do something here if sensor value changes
+    // do something here if sensor accuracy value changes
     }
 
 }
