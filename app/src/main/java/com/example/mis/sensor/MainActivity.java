@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.example.mis.sensor.FFT;
 
 import java.util.Random;
@@ -17,6 +19,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
     //example variables
+    private static final String TAG = "MainActivity";
     private double[] rndAccExamplevalues;
     private double[] freqCounts;
 
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         thisSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = thisSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        thisSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
 
         //implement RenderLines.java to draw lines
         RenderLines renderAccelerometerLines = new RenderLines(this);
@@ -101,10 +105,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+
+        if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
+            return;
+
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+            Log.d(TAG, "TYPE_ACCELEROMETER: reading accelerometer values");
+            //Toast.makeText(MainActivity.this,"accelerometer values",Toast.LENGTH_SHORT).show();
+
         //sensor return three values
-        float x = event.values[0];
-        float y = event.values[1];
-        float z = event.values[2];
+
 
     }
 
@@ -112,9 +124,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 // do something here if sensor value changes
     }
-
-
-
-
 
 }
