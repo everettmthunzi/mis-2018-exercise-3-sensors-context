@@ -10,6 +10,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mis.sensor.FFT;
@@ -23,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private double[] rndAccExamplevalues;
     private double[] freqCounts;
 
+    //instance of RenderLines
+    RenderLines renderInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +38,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         randomFill(rndAccExamplevalues);
         new FFTAsynctask(64).execute(rndAccExamplevalues);
 
+        //instance of RenderLines
+         renderInfo = new RenderLines(MainActivity.this);
+
+
+        // set-up: Accelerometer Manager and then register the listener
         thisSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = thisSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         thisSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
@@ -112,7 +122,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             float x = event.values[0];
             float y = event.values[1];
             float z = event.values[2];
-            Log.d(TAG, "TYPE_ACCELEROMETER: reading accelerometer values");
+
+            renderInfo.setAccelerometerReadings(x,y,z);
+            //Log.d(TAG, "TYPE_ACCELEROMETER: reading accelerometer values");
             //Toast.makeText(MainActivity.this,"accelerometer values",Toast.LENGTH_SHORT).show();
 
         //sensor return three values
