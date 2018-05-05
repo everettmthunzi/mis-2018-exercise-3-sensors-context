@@ -12,23 +12,41 @@ import android.widget.TextView;
 
 /**
  * https://stackoverflow.com/questions/3616676/how-to-draw-a-line-in-android
- * solution adapted to better suit RenderLines.java
+ * solution adapted to better suit assignment requirements
  */
 public class RenderLines extends View{
 
+    private static float xValue;
+    private static  float yValue;
+    private static  float zValue;
+    //private float magnitudeValue=0;
     private static final String TAG = "RenderLines";
 
     public RenderLines(Context context) {
         super(context);
         init();
     }
-
-    Paint paint = new Paint();
+    Paint paintX = new Paint();
+    Paint paintY = new Paint();
+    Paint paintZ = new Paint();
+    Paint paintMag = new Paint();
 
     private void init() {
-        paint.setColor(Color.BLACK);
-    }
+        //GREEN x-axis
+        paintX.setStyle(Paint.Style.FILL);
+        paintX.setColor(Color.GREEN);
+        //RED y-axis
+        paintY.setStyle(Paint.Style.FILL);
+        paintY.setColor(Color.RED);
+        //BLUE z-axis
+        paintZ.setStyle(Paint.Style.FILL);
+        paintZ.setColor(Color.BLUE);
+        //WHITE accelerometer magnitude
+        paintMag.setStyle(Paint.Style.FILL);
+        paintMag.setColor(Color.WHITE);
 
+        // ~ side note: white barely visible on the top of the application
+    }
 
     public RenderLines(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,55 +58,27 @@ public class RenderLines extends View{
         init();
     }
 
-
-  private static float xValue;
-  private static  float yValue;
-  private static  float zValue;
-    //float magnitudeValue=0;
-
     public void setAccelerometerReadings(float x, float y, float z){
-     xValue = x;
-     yValue = y;
-     zValue = z;
-     //validate our values are updating
-     //Log.d(TAG,"" + xValue + "" + yValue + "" + zValue);
+
+        xValue = x;
+        yValue = y;
+        zValue = z;
+
+        //validate our values are updating
+        //Log.d(TAG,"" + xValue + "" + yValue + "" + zValue);
     }
-
-
-    //flag to indicate start of the application
-    Boolean isFirstRun = true;
 
     @Override
     public void onDraw(Canvas canvas) {
         //Log.d(TAG, "onDraw: UPDATE!");
         Log.d(TAG,"" + xValue + "" + yValue + "" + zValue);
+
         //get the width and height of screen
         int width = getWidth();
         int height = getHeight();
 
-        // set colors outlined in the assignment doc
-        Paint paintX = new Paint();
-        paintX.setStyle(Paint.Style.FILL);
-        paintX.setColor(Color.GREEN);
-
-        Paint paintY = new Paint();
-        paintY.setStyle(Paint.Style.FILL);
-        paintY.setColor(Color.RED);
-
-        Paint paintZ = new Paint();
-        paintZ.setStyle(Paint.Style.FILL);
-        paintZ.setColor(Color.BLUE);
-
-        // ~ side note: white barely visible on the top of the application
-        Paint paintMag = new Paint();
-        paintMag.setStyle(Paint.Style.FILL);
-        paintMag.setColor(Color.WHITE);
-
-        /*
-         * All accelerometer values multiplied by a constant factor of 50
-         * This allows better visualization of line movement w.r.t.
-         * accelerometer readings
-         */
+        //accelerometer input to line visualization ratio [ 1:50 ]
+        // i.e. every accelerometer reading *K  where K is 50
 
         //update x axis
         Log.d(TAG, "onDraw: x axis updating!");
@@ -106,11 +96,14 @@ public class RenderLines extends View{
         //the magnitude (not showing the magnitude yet!!!!)
         canvas.drawLine(0, 0, width, 0, paintMag);
 
-        //points to note increase thickness of lines
-        // can line movement be smoother?
-
         //Redraw
         invalidate();
-
     }
 }
+/*
+        Side Notes:
+        -- magnitude no indicating
+        -- z axis not set
+        -- can line thickness be increased ?
+        -- can line movement be smoother?
+*/
