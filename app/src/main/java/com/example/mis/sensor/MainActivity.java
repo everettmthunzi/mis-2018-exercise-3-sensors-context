@@ -21,13 +21,14 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
     //example variables
-    private static final String TAG = "MainActivity";
     private double[] rndAccExamplevalues;
     private double[] freqCounts;
 
     //instance variable RenderLines Object
-    RenderLines renderInfo;
     RenderLines renderAccelerometerLines;
+
+    //Logger: Debugging Tag
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,23 +40,44 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         randomFill(rndAccExamplevalues);
         new FFTAsynctask(64).execute(rndAccExamplevalues);
 
-        //new RenderLines Object within the MainActivity Context
-         renderInfo = new RenderLines(MainActivity.this);
-
-
-        // set-up: Accelerometer Manager and then register the listener
+        //Accelerometer Manager
         thisSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = thisSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        //Register Listener
         thisSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
 
-        //implement RenderLines.java to draw lines
-        renderAccelerometerLines = new RenderLines(this);
-        //setContentView(renderAccelerometerLines);
+        //new RenderLines Object within the MainActivity Context
+        renderAccelerometerLines = new RenderLines(MainActivity.this);
+        setContentView(renderAccelerometerLines);
     }
-    /**
+    //: https://developer.android.com/guide/topics/sensors/sensors_overview
+    private SensorManager thisSensorManager;
+    private Sensor accelerometerSensor;
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+
+        //update for every new sensor value
+        if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
+            return;
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+        //Log.d(TAG,"" + x + "" + y + "" + z);
+        renderAccelerometerLines.setAccelerometerReadings(x,y,z);
+    }
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    // do something here if sensor accuracy value changes
+    }
+    /*---------------------------------------------------------------------------------
+     *
      * Implements the fft functionality as an async task
      * FFT(int n): constructor with fft length
      * fft(double[] x, double[] y)
+     *
      */
 
     private class FFTAsynctask extends AsyncTask<double[], Void, double[]> {
@@ -69,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         @Override
         protected double[] doInBackground(double[]... values) {
-
 
             double[] realPart = values[0].clone(); // actual acceleration values
             double[] imagPart = new double[wsize]; // init empty
@@ -88,9 +109,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             for (int i = 0; wsize > i ; i++) {
                 magnitude[i] = Math.sqrt(Math.pow(realPart[i], 2) + Math.pow(imagPart[i], 2));
             }
-
             return magnitude;
-
         }
 
         @Override
@@ -108,31 +127,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             array[i] = rand.nextDouble();
         }
     }
-
-    //: https://developer.android.com/guide/topics/sensors/sensors_overview
-    private SensorManager thisSensorManager;
-    private Sensor accelerometerSensor;
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-
-        //update for every new sensor value
-        if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
-            return;
-
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-
-            renderInfo.setAccelerometerReadings(x,y,z);
-            //Log.d(TAG, "TYPE_ACCELEROMETER: reading accelerometer values");
-            //Toast.makeText(MainActivity.this,"accelerometer values",Toast.LENGTH_SHORT).show();
-        setContentView(renderAccelerometerLines);
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    // do something here if sensor accuracy value changes
-    }
-
 }

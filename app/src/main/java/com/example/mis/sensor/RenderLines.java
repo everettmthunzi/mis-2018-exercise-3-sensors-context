@@ -107,7 +107,7 @@ public class RenderLines extends View{
         canvas.drawLine(0, 0, width, 0, paintMag);
 
         //points to note increase thickness of lines
-        // can line movement be smoother? 
+        // can line movement be smoother?
 
         //Redraw
         invalidate();
