@@ -7,10 +7,15 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
+import android.support.constraint.solver.widgets.Rectangle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,8 +54,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         //new RenderLines Object within the MainActivity Context
         renderAccelerometerLines = new RenderLines(MainActivity.this);
-        setContentView(renderAccelerometerLines);
+        //setContentView(renderAccelerometerLines);
+
+        //using fragments to display multiple views instantaneously
+        FirstFragment firstFragment = new FirstFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.secondLayout, firstFragment, firstFragment.getTag())
+                .commit();
+
+        SecondFragment secondFragment = new SecondFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.firstLayout, secondFragment, secondFragment.getTag())
+                .commit();
+
+        ViewGroup layout = (ViewGroup) findViewById(R.id.firstLayout);
+     //   renderAccelerometerLines.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        layout.addView(renderAccelerometerLines);
+
+
     }
+
     //: https://developer.android.com/guide/topics/sensors/sensors_overview
     private SensorManager thisSensorManager;
     private Sensor accelerometerSensor;
@@ -72,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     // do something here if sensor accuracy value changes
     }
+
     /*---------------------------------------------------------------------------------
      *
      * Implements the fft functionality as an async task

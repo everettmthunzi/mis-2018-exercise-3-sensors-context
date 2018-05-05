@@ -1,6 +1,5 @@
 package com.example.mis.sensor;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,13 +7,14 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 /**
  * https://stackoverflow.com/questions/3616676/how-to-draw-a-line-in-android
- * solution adapted to better suit assignment requirements
+ * https://stackoverflow.com/questions/37366046/create-buttons-on-canvas-in-android
+ *
+ * solutions adapted to better suit assignment requirements
  */
-public class RenderLines extends View{
+public class RenderLines extends View {
 
     private static float xValue;
     private static  float yValue;
@@ -45,7 +45,7 @@ public class RenderLines extends View{
         paintMag.setStyle(Paint.Style.FILL);
         paintMag.setColor(Color.WHITE);
 
-        // ~ side note: white barely visible on the top of the application
+        //white barely visible on the top of the application
     }
 
     public RenderLines(Context context, AttributeSet attrs) {
@@ -96,9 +96,20 @@ public class RenderLines extends View{
         //the magnitude (not showing the magnitude yet!!!!)
         canvas.drawLine(0, 0, width, 0, paintMag);
 
-        //Redraw
+        //Redraw lines on accelerometer value updates
         invalidate();
+
+        //---------------------Button Drawable
+
+
+
     }
+
+
+
+
+
+
 }
 /*
         Side Notes:
