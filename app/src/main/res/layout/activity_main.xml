@@ -15,7 +15,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/secondLayout"
+        app:layout_constraintBottom_toTopOf="@+id/thirdLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,14 +24,26 @@
 
     <LinearLayout
         android:id="@+id/secondLayout"
+        android:layout_width="375dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="7dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thirdLayout"></LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/thirdLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/secondLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstLayout"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/firstLayout">
+
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

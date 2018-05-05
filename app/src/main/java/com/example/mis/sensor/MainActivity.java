@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.support.constraint.solver.widgets.Rectangle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mis.sensor.FFT;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.Random;
 
@@ -28,6 +32,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //example variables
     private double[] rndAccExamplevalues;
     private double[] freqCounts;
+
+    private LineGraphSeries<DataPoint> FFT_series;
+
+    //whats the y value ?
+    //whats the x value ?
+
+
 
     //instance variable RenderLines Object
     RenderLines renderAccelerometerLines;
@@ -39,6 +50,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+/*        //creating a graph view
+        GraphView graphView = (GraphView) findViewById(R.id.graph);
+        FFT_series = new LineGraphSeries <>();
+
+        double x, y;
+        x = 0;
+
+        // add the amount of data points
+        int dataPoints =  100;
+
+        //append real-time data to GRAPH_
+        for(int i = 0; i < dataPoints; i++){
+            x = x + 0.1;
+            y = Math.sin(x);
+            FFT_series.appendData(new DataPoint(x,y), true, 100);
+        }
+       // graphView.addSeries(FFT_series);*/
 
         //initiate and fill example array with random values
         rndAccExamplevalues = new double[64];
@@ -52,27 +81,31 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Register Listener
         thisSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
 
-        //new RenderLines Object within the MainActivity Context
-        renderAccelerometerLines = new RenderLines(MainActivity.this);
-        //setContentView(renderAccelerometerLines);
 
         //using fragments to display multiple views instantaneously
+        //first fragment: accelerometer lines
         FirstFragment firstFragment = new FirstFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.secondLayout, firstFragment, firstFragment.getTag())
                 .commit();
 
+        //second fragment: sample rate and FFT window size seek-bars
         SecondFragment secondFragment = new SecondFragment();
         fragmentManager.beginTransaction()
                 .replace(R.id.firstLayout, secondFragment, secondFragment.getTag())
                 .commit();
 
+        //third fragment: real-time FFT data
+        ThirdFragment thirdFragment = new ThirdFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.thirdLayout, thirdFragment, thirdFragment.getTag())
+                .commit();
+
+        // add RenderLines ~ (View Class) to firstLayout
         ViewGroup layout = (ViewGroup) findViewById(R.id.firstLayout);
-     //   renderAccelerometerLines.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        renderAccelerometerLines = new RenderLines(MainActivity.this);
         layout.addView(renderAccelerometerLines);
-
-
     }
 
     //: https://developer.android.com/guide/topics/sensors/sensors_overview
@@ -81,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         //update for every new sensor value
         if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
             return;
@@ -152,4 +184,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             array[i] = rand.nextDouble();
         }
     }
+
+
+
 }
