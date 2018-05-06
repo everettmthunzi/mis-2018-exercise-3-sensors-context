@@ -98,18 +98,7 @@ public class RenderLines extends View {
 
         //Redraw lines on accelerometer value updates
         invalidate();
-
-        //---------------------Button Drawable
-
-
-
     }
-
-
-
-
-
-
 }
 /*
         Side Notes:

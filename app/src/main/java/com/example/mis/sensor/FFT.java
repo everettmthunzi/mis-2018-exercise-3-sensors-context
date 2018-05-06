@@ -44,7 +44,7 @@ public class FFT {
         if (n != (1 << m))
             throw new RuntimeException("FFT length must be power of 2");
 
-        // precompute tables
+        // pre-compute tables
         cos = new double[n / 2];
         sin = new double[n / 2];
 

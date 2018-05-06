@@ -5,17 +5,16 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:layout_editor_absoluteY="81dp">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/firstLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="374dp"
+        android:layout_height="183dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/thirdLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,26 +23,25 @@
 
     <LinearLayout
         android:id="@+id/secondLayout"
-        android:layout_width="375dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="7dp"
+        android:layout_width="371dp"
+        android:layout_height="71dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/thirdLayout"></LinearLayout>
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"></LinearLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/thirdLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="372dp"
+        android:layout_height="236dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/secondLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstLayout">
+        app:layout_constraintTop_toBottomOf="@+id/firstLayout" />
 
-    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

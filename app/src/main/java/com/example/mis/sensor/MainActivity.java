@@ -29,16 +29,16 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
-    //example variables
+    //variables
+
+    //using GraphView : http://www.android-graphview.org/
+    private LineGraphSeries<DataPoint> FFT_series;
+
     private double[] rndAccExamplevalues;
     private double[] freqCounts;
 
-    private LineGraphSeries<DataPoint> FFT_series;
-
-    //whats the y value ?
-    //whats the x value ?
-
-
+    private SensorManager thisSensorManager;
+    private Sensor accelerometerSensor;
 
     //instance variable RenderLines Object
     RenderLines renderAccelerometerLines;
@@ -51,12 +51,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-/*        //creating a graph view
-        GraphView graphView = (GraphView) findViewById(R.id.graph);
-        FFT_series = new LineGraphSeries <>();
+        //initiate and fill example array with random values
+        rndAccExamplevalues = new double[64];
+        randomFill(rndAccExamplevalues);
+        new FFTAsynctask(64).execute(rndAccExamplevalues);
 
-        double x, y;
+        initializeGraph();
+        initializeAccelerometerLineRendering();
+    }
+
+    //Real-time Graphing
+    public void initializeGraph(){
+        double x;
+        double y;
         x = 0;
+        y = 0;
+
+        //Create Graph View
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        FFT_series = new LineGraphSeries <>();
+        graph.addSeries(FFT_series);
 
         // add the amount of data points
         int dataPoints =  100;
@@ -66,14 +80,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             x = x + 0.1;
             y = Math.sin(x);
             FFT_series.appendData(new DataPoint(x,y), true, 100);
-        }
-       // graphView.addSeries(FFT_series);*/
+           }
+        Log.d(TAG,"NULL POINTER HERE" + x + "" + y + "" + FFT_series);
+        graph.addSeries(FFT_series);
+    }
 
-        //initiate and fill example array with random values
-        rndAccExamplevalues = new double[64];
-        randomFill(rndAccExamplevalues);
-        new FFTAsynctask(64).execute(rndAccExamplevalues);
-
+    // Processing Accelerometer Values
+    public void initializeAccelerometerLineRendering(){
         //Accelerometer Manager
         thisSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = thisSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -81,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //Register Listener
         thisSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
 
+        //FRAGMENTS TO DISPLAY MULTI-VIEWS
 
-        //using fragments to display multiple views instantaneously
         //first fragment: accelerometer lines
         FirstFragment firstFragment = new FirstFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -96,45 +109,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 .replace(R.id.firstLayout, secondFragment, secondFragment.getTag())
                 .commit();
 
-        //third fragment: real-time FFT data
-        ThirdFragment thirdFragment = new ThirdFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.thirdLayout, thirdFragment, thirdFragment.getTag())
-                .commit();
-
         // add RenderLines ~ (View Class) to firstLayout
         ViewGroup layout = (ViewGroup) findViewById(R.id.firstLayout);
         renderAccelerometerLines = new RenderLines(MainActivity.this);
         layout.addView(renderAccelerometerLines);
     }
 
-    //: https://developer.android.com/guide/topics/sensors/sensors_overview
-    private SensorManager thisSensorManager;
-    private Sensor accelerometerSensor;
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         //update for every new sensor value
         if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
             return;
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
 
         //Log.d(TAG,"" + x + "" + y + "" + z);
         renderAccelerometerLines.setAccelerometerReadings(x,y,z);
     }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    // do something here if sensor accuracy value changes
+        // do something here if sensor accuracy value changes
     }
 
-    /*---------------------------------------------------------------------------------
-     *
+    //------------------------------------------------------------------------FFTAsync Class:
+
+    /**
      * Implements the fft functionality as an async task
      * FFT(int n): constructor with fft length
      * fft(double[] x, double[] y)
-     *
      */
 
     private class FFTAsynctask extends AsyncTask<double[], Void, double[]> {
@@ -184,7 +187,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             array[i] = rand.nextDouble();
         }
     }
-
-
-
 }
