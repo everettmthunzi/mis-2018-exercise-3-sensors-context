@@ -30,7 +30,9 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
-    //variables
+    public int windowSize;
+    public int sampleRate;
+
 
     //using GraphView : http://www.android-graphview.org/
     private LineGraphSeries<DataPoint> FFT_series;
@@ -82,16 +84,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 textViewSampleRate.setText("" + progress);
+                sampleRate = progress;
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
@@ -99,16 +99,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 textViewFFRWindow.setText("" + progress );
+                windowSize = progress;
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
@@ -181,6 +180,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private class FFTAsynctask extends AsyncTask<double[], Void, double[]> {
 
         private int wsize; //window size must be power of 2
+
+        public void setWsize(int windowSize){
+            wsize = windowSize;
+        }
 
         // constructor to set window size
         FFTAsynctask(int wsize) {
