@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager thisSensorManager;
     private Sensor accelerometerSensor;
 
+    private SeekBar sampleRateSeekBar;
+    private SeekBar windowSizeSeekBar;
+
+    private TextView textViewSampleRate;
+    private TextView textViewFFRWindow;
     //instance variable RenderLines Object
     RenderLines renderAccelerometerLines;
 
@@ -56,6 +62,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         randomFill(rndAccExamplevalues);
         new FFTAsynctask(64).execute(rndAccExamplevalues);
 
+        // Seek Bar - setup
+        sampleRateSeekBar  = (SeekBar) findViewById(R.id.seekBar_SR);
+        windowSizeSeekBar  = (SeekBar) findViewById(R.id.seekBar_FFT_window);
+        textViewFFRWindow  = (TextView) findViewById(R.id.textViewFFTW);
+        textViewSampleRate = (TextView) findViewById(R.id.textViewSR);
+
         initializeGraph();
         initializeAccelerometerLineRendering();
     }
@@ -65,7 +77,40 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         double x;
         double y;
         x = 0;
-        y = 0;
+
+        sampleRateSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                textViewSampleRate.setText("" + progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        windowSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                textViewFFRWindow.setText("" + progress );
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         //Create Graph View
         GraphView graph = (GraphView) findViewById(R.id.graph);
@@ -81,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             y = Math.sin(x);
             FFT_series.appendData(new DataPoint(x,y), true, 100);
            }
-        Log.d(TAG,"NULL POINTER HERE" + x + "" + y + "" + FFT_series);
         graph.addSeries(FFT_series);
     }
 
@@ -95,13 +139,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         thisSensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
 
         //FRAGMENTS TO DISPLAY MULTI-VIEWS
-
-        //first fragment: accelerometer lines
-        FirstFragment firstFragment = new FirstFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.secondLayout, firstFragment, firstFragment.getTag())
-                .commit();
 
         //second fragment: sample rate and FFT window size seek-bars
         SecondFragment secondFragment = new SecondFragment();
