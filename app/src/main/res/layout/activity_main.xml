@@ -24,13 +24,15 @@
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graph"
         android:layout_width="372dp"
-        android:layout_height="247dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="7dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
 
     <SeekBar
         android:id="@+id/seekBar_FFT_window"
@@ -105,5 +107,18 @@
         app:layout_constraintStart_toEndOf="@+id/textViewSampleRate"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.979" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="209dp"
+        android:layout_marginEnd="2dp"
+        android:text="ToggleButton"
+        android:textOff="Play"
+        android:textOn="Stop"
+        app:layout_constraintBottom_toTopOf="@+id/graph"
+        app:layout_constraintEnd_toEndOf="@+id/firstLayout"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

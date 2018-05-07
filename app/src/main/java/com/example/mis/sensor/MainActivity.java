@@ -6,20 +6,25 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.constraint.solver.widgets.Rectangle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.mis.sensor.FFT;
 import com.jjoe64.graphview.GraphView;
@@ -48,6 +53,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private TextView textViewSampleRate;
     private TextView textViewFFRWindow;
+
+    private ToggleButton toggleButton;
+    /* MediaPlayer has to be static to persist through rotation
+     * (via https://stackoverflow.com/a/17921927)
+     */
+    private static MediaPlayer mediaPlayer = null;
+
     //instance variable RenderLines Object
     RenderLines renderAccelerometerLines;
 
@@ -69,6 +81,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         windowSizeSeekBar  = (SeekBar) findViewById(R.id.seekBar_FFT_window);
         textViewFFRWindow  = (TextView) findViewById(R.id.textViewFFTW);
         textViewSampleRate = (TextView) findViewById(R.id.textViewSR);
+
+        // Music button - setup
+        toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
+
+        /* Music player - setup
+         * This will not happen when the device is merely rotated!
+         * (via https://stackoverflow.com/a/17921927)
+         */
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.district_four);
+        }
+
+        /* play/pause via onCheckedChangeListener
+         * (via https://stackoverflow.com/a/12632812)
+         */
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && !mediaPlayer.isPlaying()) {
+                    mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.district_four);
+                    mediaPlayer.setLooping(true);
+                    mediaPlayer.start();
+                }
+                // adding this condition seems superfluous, but without it rotation makes music stop
+                else if (!isChecked) {
+                    mediaPlayer.stop();
+                }
+            }
+        });
 
         initializeGraph();
         initializeAccelerometerLineRendering();
