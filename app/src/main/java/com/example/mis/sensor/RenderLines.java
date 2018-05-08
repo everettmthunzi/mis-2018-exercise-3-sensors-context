@@ -64,8 +64,12 @@ public class RenderLines extends View {
         zValue = z;
 
         //evaluating the magnitude
-        magnitude = (float) Math.sqrt((xValue*xValue) + (yValue*yValue) + (zValue*zValue));
-        // Log.d(TAG,"" + magnitude + "");
+        magnitude = Math.abs((float) Math.sqrt((xValue*xValue) + (yValue*yValue) + (zValue*zValue)));
+        //Log.d(TAG,"" + magnitude + "");
+    }
+
+    public float getMagnitude(){
+        return magnitude;
     }
 
     @Override
