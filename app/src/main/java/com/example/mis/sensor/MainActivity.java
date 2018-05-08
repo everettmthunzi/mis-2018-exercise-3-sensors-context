@@ -8,7 +8,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.Criteria;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -18,10 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -294,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 sampleRate = progress;
                 if (accelerometerSensor != null) {
                     thisSensorManager.registerListener(MainActivity.this,
-                            accelerometerSensor, sampleRate * 1000);
+                            accelerometerSensor, sampleRate);
                 }
             }
             @Override

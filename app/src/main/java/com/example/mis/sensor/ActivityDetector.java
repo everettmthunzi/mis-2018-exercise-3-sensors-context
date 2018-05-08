@@ -49,7 +49,7 @@ public class ActivityDetector extends AsyncTask<Void, Void, Void> {
             Log.d("ActivityDetector", "Average motion over last 5 sec: " + avgLastFiveSeconds);
 
             if ((avgLastFiveSeconds > 50) && (avgLastFiveSeconds < 200)) {
-                @SuppressWarnings({"ResourceType"}) // Android Studio doesn't get that we're doing what it wants here
+                @SuppressWarnings({"ResourceType"}) // Permissions are no fun
                 final Location location = MainActivity.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 if (location != null && location.hasSpeed()) {
                     int speed = (int) (location.getSpeed() * 3.6);
