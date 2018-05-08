@@ -21,32 +21,14 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <ToggleButton
-        android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="ToggleButton"
-        android:textOff="Play"
-        android:textOn="Stop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
     <SeekBar
         android:id="@+id/seekBar_FFT_window"
         android:layout_width="154dp"
         android:layout_height="27dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:max="500"
-        android:progress="100"
+        android:max="12"
+        android:progress="6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -68,20 +50,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
-        android:text="Sample Rate"
+        android:text="Sample Rate\n(lower is better)"
         app:layout_constraintBottom_toTopOf="@+id/seekBar_SR"
         app:layout_constraintStart_toEndOf="@+id/textViewSR"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.979" />
+        app:layout_constraintVertical_bias="0.997" />
 
     <TextView
         android:id="@+id/textViewFFTWS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginTop="8dp"
         android:text="FFT Window Size"
         app:layout_constraintBottom_toTopOf="@+id/seekBar_FFT_window"
