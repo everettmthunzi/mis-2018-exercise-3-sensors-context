@@ -37,7 +37,7 @@ import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
-    private int windowSize = 64;
+    private static int windowSize = 64;
     private int sampleRate = SensorManager.SENSOR_DELAY_GAME;
     public static double[] freqCounts;
     private static float accMagnitude;
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setTextColor(Color.WHITE);
         leftAxis.setDrawGridLines(false);
-        leftAxis.setAxisMaximum(500f);
+        leftAxis.setAxisMaximum(800f);
         leftAxis.setAxisMinimum(0f);
         leftAxis.setDrawGridLines(true);
 
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 data.addDataSet(set);
             }
             set.clear();
-            for (int i = 0; i < windowSize; i++) {
+            for (int i = 0; i < freqCounts.length; i++) {
                 //offset with a value of 200f for better visualization
                 Entry entry = new Entry(i, (float) freqCounts[i]+ 200f); //play around with this value
                 // Log.d(TAG,"------THE ENTRY COUNT IS :" + set.getEntryCount());
