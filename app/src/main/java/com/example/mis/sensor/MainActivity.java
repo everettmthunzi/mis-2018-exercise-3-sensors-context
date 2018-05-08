@@ -226,7 +226,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
             set.clear();
             for (int i = 0; i < windowSize; i++) {
-                Entry entry = new Entry(i, (float) freqCounts[i]); //play around with this value
+                //offset with a value of 200f for better visualization
+                Entry entry = new Entry(i, (float) freqCounts[i]+ 200f); //play around with this value
                 // Log.d(TAG,"------THE ENTRY COUNT IS :" + set.getEntryCount());
                 data.addEntry(entry, 0);
             }
